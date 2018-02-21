@@ -89,7 +89,7 @@ public class ScrumApp_Server {
 
                 // Verify user credentials in MySQL-database by running login()-method
                 boolean loginSuccess = login(userInput, passInput);
-
+                boolean adminLogin = false;
                 // If login()-method returns false, close client socket, else continue                
                 if (loginSuccess != true) {
                     out.println("quit");
@@ -97,15 +97,27 @@ public class ScrumApp_Server {
 
                 }
 
-                
-                out.println("\nWelcome " + userInput + "!");
-                out.println("To quit, just type \"quit\"");
-                out.println("Retrieve data from temperature sensor:");
-                out.println("1: Living room");
-                out.println("2: Hall");
-                out.println("3: Kitchen");
-                out.println("4: Master bedroom");
-                out.println("5: Small bedroom");
+                if ("admin".equals(userInput)) {
+                    adminLogin = true;
+                    out.println("\nWelcome " + userInput + "!");
+                    out.println("To quit, just type \"quit\"");
+                    out.println("Choose Temperature sensor 1-5");
+                    out.println("");
+                    out.println("OR");
+                    out.println("");
+                    out.println("type \"SCRUM\" to add data");
+                    out.println("");
+                } else {
+                    adminLogin = false;
+                    out.println("\nWelcome " + userInput + "!");
+                    out.println("To quit, just type \"quit\"");
+                    out.println("Retrieve data from temperature sensor:");
+                    out.println("1: Living room");
+                    out.println("2: Hall");
+                    out.println("3: Kitchen");
+                    out.println("4: Master bedroom");
+                    out.println("5: Small bedroom");
+                }
 
                 // Loop infinitely until client breaks with "quit"
                 while (true) {
@@ -124,27 +136,31 @@ public class ScrumApp_Server {
                     if (input.equals("1")) {
                         room = "temp_living";
                         rTemp(room);
-                        // out.println("numero uuno");
+
                     }
                     if (input.equals("2")) {
                         room = "temp_hall";
                         rTemp(room);
-                        //   out.println("numero zwei");
+
                     }
                     if (input.equals("3")) {
                         room = "temp_kitchen";
                         rTemp(room);
-                        //    out.println("numero drei");
+
                     }
                     if (input.equals("4")) {
                         room = "temp_bed1";
                         rTemp(room);
-                        //     out.println("numero fyra");
+
                     }
                     if (input.equals("5")) {
                         room = "temp_bed2";
                         rTemp(room);
-                        //    out.println("numero femma");
+
+                    }
+                    if (input.equals("SCRUM") && adminLogin == true) {
+
+                        // go to adding function
                     }
 
                     // if input is not a number between 1-5 -> Try again
