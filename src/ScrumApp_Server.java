@@ -85,7 +85,7 @@ public class ScrumApp_Server {
                 // read client credentials
                 String userInput = in.readLine();
                 String passInput = in.readLine();
-                System.out.println("user " + userInput + " logged in");  // Print credentials to server console, debugging purposes only
+                System.out.println("user " + userInput + " logged in");  // Print user to server console, debugging purposes only
 
                 // Verify user credentials in MySQL-database by running login()-method
                 boolean loginSuccess = login(userInput, passInput);
