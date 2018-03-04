@@ -44,22 +44,16 @@ public class DBwriter {
         }
     }
 
-    //Set temperature
-    public void setTemp(String d, String t, String v) {
-        String date = d;
-        String time = t;
-        String value = v;
+    public boolean valueChecker(String u, String p) {
+        String user = u;
+        String pass = p;
+
         try {
-
             stmt = conn.createStatement();
-
-            stmt.executeUpdate("INSERT INTO `temperature` (`id`, `date`, `value`) VALUES (NULL, '" + date + " " + time + "', '" + value + "')");
-            //    INSERT INTO `temperature` (`id`, `date`, `value`) VALUES (NULL, CURRENT_TIMESTAMP, '20.1');
-
-            System.out.println("");
-            System.out.print("Temperature data  " + date + " " + time + ", value " + value + ", was successfully inserted into database!");
-            System.out.println("");
-
+            rs = stmt.executeQuery("SELECT * FROM user_table WHERE user='" + user + "' AND pass='" + pass + "'");
+            if (rs.next()) {
+                return true;
+            }
         } catch (SQLException ex) {
             // handle any errors
             System.out.println("SQLException: " + ex.getMessage());
@@ -70,7 +64,6 @@ public class DBwriter {
             // resources in a finally{} block
             // in reverse-order of their creation
             // if they are no-longer needed
-
             if (rs != null) {
                 try {
                     rs.close();
@@ -89,10 +82,12 @@ public class DBwriter {
                 stmt = null;
             }
         }
+        return false;
     }
 
-    // Set humidity
-    public void setHum(String d, String t, String v) {
+    //Set temperature
+    public int setTemp(String r, String d, String t, String v) {
+        String room = r;
         String date = d;
         String time = t;
         String value = v;
@@ -100,12 +95,16 @@ public class DBwriter {
 
             stmt = conn.createStatement();
 
-            stmt.executeUpdate("INSERT INTO `humidity` (`id`, `date`, `value`) VALUES (NULL, '" + date + " " + time + "', '" + value + "')");
-            //    INSERT INTO `temperature` (`id`, `date`, `value`) VALUES (NULL, CURRENT_TIMESTAMP, '20.1');
+            rs = stmt.executeQuery("SELECT * FROM `" + room + "` WHERE `date` = \"" + date + " " + time + "\"");
+            if (rs.next()) {
+                System.out.println("SEND Temperature data  " + date + " " + time + ", value " + value + ", FAIL: Value exists");
+                return 0;
+            }
 
-            System.out.println("");
-            System.out.print("Humidity data  " + date + " " + time + ", value " + value + ", was successfully inserted into database!");
-            System.out.println("");
+            stmt.executeUpdate("INSERT INTO `" + room + "` (`id`, `date`, `value`) VALUES (NULL, '" + date + " " + time + "', '" + value + "')");
+            //    INSERT INTO `temperature` (`id`, `date`, `value`) VALUES (NULL, CURRENT_TIMESTAMP, '20.1');
+            System.out.println("SEND Temperature data  " + date + " " + time + ", value " + value + ", OK");
+            return 1;
 
         } catch (SQLException ex) {
             // handle any errors
@@ -136,5 +135,6 @@ public class DBwriter {
                 stmt = null;
             }
         }
+        return 0;
     }
 }
